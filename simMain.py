@@ -16,44 +16,41 @@ from metro_mask import *
 
 def set_optics(v=None):
     el = [] #optics element  
-    #el.append(srwlib.SRWLOptA("r", "a", 0.001, 0.001, 0.0, 0.0))
-    #el.append(srwlib.SRWLOptD(4.0))
-    el.append(srwlib.SRWLOptA("c", "a", 0.0001, 0.0001, 0.0, 0.0))
+    el.append(srwlib.SRWLOptA("c", "a", 1.e-04, 1.e-04, 0.0, 0.0))
     el.append(srwlib.SRWLOptD(50.0))
     el.append(srwlib.SRWLOptMirEl(_p=50.0, _q=0.4, _ang_graz=0.003, _size_tang=0.2, _size_sag=0.01, _nvx=0.0, _nvy=0.999995500003, _nvz=-0.0029999955, _tvx=0.0, _tvy=-0.0029999955))
     el.append(srwlib.SRWLOptD(0.2))
     el.append(srwlib.SRWLOptMirEl(_p=50.2, _q=0.2, _ang_graz=0.003, _size_tang=0.2, _size_sag=0.01, _nvx=0.999993520007, _nvy=0.0, _nvz=-0.0029999955, _tvx=-0.0029999955, _tvy=0.0))
     el.append(srwlib.SRWLOptD(0.7))
-    # Generate aperture at Mask.
-    diamMask_x = 1e-3 # Mask diameter in x [m]
-    diamMask_y = 1e-3 # Mask diameter in y [m]
-    # el.append(srwlib.SRWLOptA('r', 'a', diamMask_x, diamMask_y))
-    #el.append(srwlib.SRWLOptD(50))
-    intNx=1024
-    intNy=1024
-    gridSize = 5.e-06  # [m]
-    pitch_x = 20.e-6
-    pitch_y = 20.e-6
-    #mask_x0=pitch_x/2
-    #mask_y0=pitch_y/2
-    mask_x0=0
-    mask_y0=0
-    maskNx = intNx  # [1]
-    maskNy = intNy  # [1]
-    numGrids = 21 # [1]
-    gridAngle = math.pi / 180 * 25  # [rad]
-    hx =  7.32e-07  # [m]
-    hy =  7.32e-07 # [m]
-    thickness=1
-    grid_sh = 0    #grid shape 0. circle hartamann 1. rectangle hartamann 2. 2D grating
+
+    # Generate Mask Parameter.
+    diamMask_x  = 1e-3              # Mask Diameter in x [m] ?? where to use?
+    diamMask_y  = 1e-3              # Mask Diameter in y [m] ?? where to use?
+    intNx       = 1024              # [1]
+    intNy       = 1024              # [1]
+    gridSize    = 5.e-06            # [m]
+    pitch_x     = 20.e-6            # [m]
+    pitch_y     = 20.e-6            # [m]
+    mask_x0     = 0                 # [m]
+    mask_y0     = 0                 # [m]
+    maskNx      = intNx             # [1]
+    maskNy      = intNy             # [1]
+    numGrids    = 81                # [1]
+    gridAngle   = math.pi/180*25    # [rad]
+    hx          = 7.32e-07          # [m]
+    hy          = 7.32e-07          # [m]
+    thickness   = 1.e-03            # [m]
+    grid_sh     = 0                 # Grid Shape: 0-Circular Hartamann; 1-Rectangular Hartamann; 2-2D Grating
+
     # Generate a 2D Mask.
     opMask = srwl_opt_setup_mask(_delta=1, _atten_len=1, _thick=thickness, _grid_sh=grid_sh, _grid_dx=gridSize,
                              _grid_dy=gridSize, _pitch_x=pitch_x, _pitch_y=pitch_y, _grid_nx=numGrids,
                              _grid_ny=numGrids, _mask_Nx=maskNx, _mask_Ny=maskNy, _grid_angle=gridAngle,
                              _hx=hx, _hy=hy,_mask_x0=mask_x0,_mask_y0=mask_y0)   
     el.append(opMask)
-    el.append(srwlib.SRWLOptD(0.2+1.e-09))
-    
+    el.append(srwlib.SRWLOptD(0.4))
+
+    # Propengation Parameters.
     pp = []    
     pp.append([0, 0, 1.0, 0, 0, 1.0, 1.0, 1.0, 1.0])
     pp.append([0, 0, 1.0, 1, 0, 1.0, 1.0, 1.0, 1.0])
